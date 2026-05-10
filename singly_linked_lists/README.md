@@ -1,1 +1,1 @@
-Singly linked lists project
+Singly Linked Lists Project
