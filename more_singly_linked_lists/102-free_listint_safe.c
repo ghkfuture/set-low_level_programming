@@ -1,38 +1,47 @@
 #include "lists.h"
 
 /**
- * free_listint_safe - frees a listint_t list handling cyclic loops safely
- * @h: double pointer to the head node of the target list
+ * free_listint_safe - Frees a listint_t list safely (handles loops).
+ * @h: A double pointer to the head of the listint_t list.
  *
- * Return: total size of the nodes cleared from memory
+ * Return: The size of the list that was freed.
  */
 size_t free_listint_safe(listint_t **h)
 {
-size_t nodes = 0;
-long int diff;
-listint_t *temp;
+listint_t **list = NULL, **new_list;
+listint_t *next;
+size_t i, count = 0;
 
 if (!h || !*h)
 return (0);
 
 while (*h)
 {
-diff = *h - (*h)->next;
-if (diff > 0)
+for (i = 0; i < count; i++)
 {
-temp = (*h)->next;
-free(*h);
-*h = temp;
-nodes++;
-}
-else
+if (*h == list[i])
 {
+*h = NULL;
+free(list);
+return (count);
+}
+}
+new_list = malloc((count + 1) * sizeof(listint_t *));
+if (!new_list)
+{
+free(list);
+exit(98);
+}
+for (i = 0; i < count; i++)
+new_list[i] = list[i];
+new_list[count] = *h;
+free(list);
+list = new_list;
+next = (*h)->next;
 free(*h);
-*h = NULL;
-nodes++;
-break;
+*h = next;
+count++;
 }
-}
-*h = NULL;
-return (nodes);
+free(list);
+return (count);
 }
