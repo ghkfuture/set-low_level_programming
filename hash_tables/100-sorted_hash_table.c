@@ -74,7 +74,6 @@ else
 node->snext = curr;
 node->sprev = curr->sprev;
 curr->sprev->snext = node;
-curr->prev = node; /* explicitly unused field set safe */
 curr->sprev = node;
 }
 }
